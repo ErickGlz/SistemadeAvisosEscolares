@@ -106,7 +106,18 @@ namespace SistemadeAvisosEscolares.Services
                 repositoryLeidos.Insert(entidad);
             }
         }
-       
+        public void EliminarAviso(int idAviso)
+        {
+            var aviso = repository.Get(idAviso);
+
+            if (aviso == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            repository.Delete(idAviso);
+        }
+
     }
 
 }

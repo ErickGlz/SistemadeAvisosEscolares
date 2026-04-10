@@ -83,5 +83,18 @@ namespace SistemadeAvisosEscolares.Controllers
                 return BadRequest(ex.Errors.Select(x => x.ErrorMessage));
             }
         }
+        [HttpDelete("{idAviso}")]
+        public IActionResult EliminarAviso(int idAviso)
+        {
+            try
+            {
+                service.EliminarAviso(idAviso);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
     }
 }
