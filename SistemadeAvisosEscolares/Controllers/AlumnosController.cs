@@ -43,5 +43,11 @@ namespace SistemadeAvisosEscolares.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
+        public IActionResult GetAlumnos()
+        {
+            var alumnos = service.GetAlumnos();
+            return Ok(alumnos);
+        }
     }
 }

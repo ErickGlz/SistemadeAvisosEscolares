@@ -34,5 +34,18 @@ namespace SistemadeAvisosEscolares.Services
 
             return mapper.Map<AlumnoDTO>(alumno);
         }
+        public List<AlumnoDTO> GetAlumnos()
+        {
+            var alumnos = repository.Query()
+                .Select(x => new AlumnoDTO
+                {
+                    IdAlumno = x.IdAlumno,
+                    Nombre = x.Nombre ?? "",
+                    Matricula = x.Matricula ?? ""
+                })
+                .ToList();
+
+            return alumnos;
+        }
     }
 }
