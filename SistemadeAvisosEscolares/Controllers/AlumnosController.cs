@@ -43,11 +43,16 @@ namespace SistemadeAvisosEscolares.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
-        public IActionResult GetAlumnos()
+
+        [HttpGet("matricula/{matricula}")]
+        public IActionResult GetByMatricula(string matricula)
         {
-            var alumnos = service.GetAlumnos();
-            return Ok(alumnos);
+            var alumno = service.GetByMatricula(matricula);
+
+            if (alumno == null)
+                return NotFound();
+
+            return Ok(alumno);
         }
     }
 }

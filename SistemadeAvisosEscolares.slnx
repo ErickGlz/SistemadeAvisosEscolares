@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="AplicacionAvisosEscolares/AplicacionAvisosEscolares.csproj" Id="6245fc8e-623f-4c57-8909-13127972b98b" />
   <Project Path="SistemadeAvisosEscolares/SistemadeAvisosEscolaresApi.csproj" />
 </Solution>

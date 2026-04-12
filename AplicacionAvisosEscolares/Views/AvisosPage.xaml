@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AplicacionAvisosEscolares.Views.AvisosPage" 
+             xmlns:converters="clr-namespace:AplicacionAvisosEscolares.Converters"
+             Title="AvisosPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:NoLeidoConverter x:Key="NullToBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <VerticalStackLayout>
+
+        <!-- Loader -->
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                       IsVisible="{Binding IsLoading}" />
+
+        <!-- Lista -->
+        <CollectionView ItemsSource="{Binding Generales}" SelectionMode="Single" SelectionChanged="OnSelectionChanged">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border Margin="10"
+                        Padding="10"
+                        Stroke="#ddd">
+
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout Spacing="5">
+
+                            <Label Text="{Binding Titulo}"
+                               FontAttributes="Bold"
+                               FontSize="16"/>
+
+                            <Label Text="{Binding Contenido}" />
+
+                            <Label Text="{Binding Maestro}"
+                               FontSize="12"
+                               TextColor="Gray"/>
+
+                            <!-- NO LEÍDO -->
+                            <Label Text="NO LEÍDO"
+                               TextColor="Red"
+                               IsVisible="{Binding FechaLeido, Converter={StaticResource NullToBool}}" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>

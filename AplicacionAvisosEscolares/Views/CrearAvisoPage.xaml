@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AplicacionAvisosEscolares.Views.CrearAvisoPage"
+             Title="CrearAvisoPage">
+    <VerticalStackLayout Padding="20" Spacing="10">
+
+        <Entry Placeholder="Título"
+           Text="{Binding Titulo}" />
+
+        <Editor Placeholder="Contenido"
+            HeightRequest="100"
+            Text="{Binding Contenido}" />
+
+        <Entry Placeholder="Matrícula del alumno (opcional)"
+           Text="{Binding MatriculaAlumno}" />
+
+        <Button Text="Crear Aviso"
+            Command="{Binding CrearCommand}" />
+
+    </VerticalStackLayout>
+</ContentPage>
