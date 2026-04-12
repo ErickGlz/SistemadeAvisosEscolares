@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Input;
 
 namespace AplicacionAvisosEscolares.ViewModels
 {
@@ -25,10 +26,36 @@ namespace AplicacionAvisosEscolares.ViewModels
 
         AvisosService service;
 
+        public ICommand EliminarCommand { get; }
+
         public AvisosMaestroViewModel()
         {
             service = new AvisosService();
+            EliminarCommand = new Command<AvisoDTO>(async (aviso) => await Eliminar(aviso));
             Cargar();
+        }
+
+        private async Task Eliminar(AvisoDTO aviso)
+        {
+            bool confirm = await App.Current.MainPage.DisplayAlert(
+                "Confirmar",
+                "¿Eliminar este aviso?",
+                "Sí",
+                "No");
+
+            if (!confirm) return;
+
+            var ok = await service.EliminarAviso(aviso.IdAviso);
+
+            if (ok)
+            {
+                Avisos.Remove(aviso);
+                Cargar();
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "No se pudo eliminar", "OK");
+            }
         }
 
         private async void Cargar()

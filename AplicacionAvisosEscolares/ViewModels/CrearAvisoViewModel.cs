@@ -30,7 +30,6 @@ namespace AplicacionAvisosEscolares.ViewModels
 
             int? idAlumno = null;
 
-            // 🔥 AQUÍ VA EL MÉTODO 3
             if (!string.IsNullOrEmpty(MatriculaAlumno))
             {
                 var alumno = await service.GetAlumnoPorMatricula(MatriculaAlumno);
@@ -46,7 +45,6 @@ namespace AplicacionAvisosEscolares.ViewModels
                 }
             }
 
-            // 🔥 DESPUÉS de obtener idAlumno
             var aviso = new CrearAvisoDTO
             {
                 Titulo = Titulo,

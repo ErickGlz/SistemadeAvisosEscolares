@@ -21,7 +21,6 @@ namespace AplicacionAvisosEscolares.Services
                 };
             }
 
-            // 🔐 LOGIN ALUMNO
             public async Task<AlumnoDTO?> LoginAlumno(string matricula, string password)
             {
                 var response = await client.PostAsJsonAsync("api/Alumnos/login", new
@@ -38,7 +37,6 @@ namespace AplicacionAvisosEscolares.Services
                 return null;
             }
 
-            // 🔐 LOGIN MAESTRO
             public async Task<MaestroDTO?> LoginMaestro(int idMaestro, string password)
             {
                 var response = await client.PostAsJsonAsync("api/Maestros/login", new
@@ -55,7 +53,6 @@ namespace AplicacionAvisosEscolares.Services
                 return null;
             }
 
-            // 📢 AVISOS DEL ALUMNO
             public async Task<List<AvisoDTO>> GetAvisosAlumno(int idAlumno)
             {
                 var response = await client.GetAsync($"api/Avisos/alumno/{idAlumno}");
@@ -69,7 +66,6 @@ namespace AplicacionAvisosEscolares.Services
                 return new List<AvisoDTO>();
             }
 
-            // 👨‍🏫 AVISOS DEL MAESTRO
             public async Task<List<AvisoDTO>> GetAvisosMaestro(int idMaestro)
             {
                 var response = await client.GetAsync($"api/Maestros/{idMaestro}/avisos");
@@ -83,7 +79,6 @@ namespace AplicacionAvisosEscolares.Services
                 return new List<AvisoDTO>();
             }
 
-            // 👁️ MARCAR COMO LEÍDO
             public async Task<bool> MarcarLeido(int idAviso, int idAlumno)
             {
                 var response = await client.PutAsJsonAsync("api/Avisos/leido", new
@@ -95,7 +90,6 @@ namespace AplicacionAvisosEscolares.Services
                 return response.IsSuccessStatusCode;
             }
 
-            // ➕ CREAR AVISO (MAESTRO)
             public async Task<bool> CrearAviso(CrearAvisoDTO dto)
             {
                 var response = await client.PostAsJsonAsync("api/Avisos", dto);
@@ -122,6 +116,12 @@ namespace AplicacionAvisosEscolares.Services
                 {
                     return null;
                 }
+            }
+
+            public async Task<bool> EliminarAviso(int idAviso)
+            {
+                var response = await client.DeleteAsync($"api/Avisos/{idAviso}");
+                return response.IsSuccessStatusCode;
             }
         }
     }

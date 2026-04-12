@@ -1,10 +1,7 @@
 ﻿using AplicacionAvisosEscolares.Models;
 using AplicacionAvisosEscolares.Services.AvisosApp.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 
 namespace AplicacionAvisosEscolares.ViewModels
 {
@@ -23,6 +20,17 @@ namespace AplicacionAvisosEscolares.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
             }
         }
+
+        public bool VerGenerales { get; set; } = true;
+        public bool VerPersonales { get; set; }
+        public Color ColorGenerales => VerGenerales ? Color.FromArgb("#1E88E5") : Color.FromArgb("#BBDEFB");
+        public Color ColorPersonales => VerPersonales ? Color.FromArgb("#1E88E5") : Color.FromArgb("#BBDEFB");
+
+        public Color TextoGenerales => VerGenerales ? Colors.White : Colors.Black;
+        public Color TextoPersonales => VerPersonales ? Colors.White : Colors.Black;
+
+        public Command MostrarGeneralesCommand { get; }
+        public Command MostrarPersonalesCommand { get; }
         public Command<AvisoDTO> VerAvisoCommand { get; }
 
         AvisosService service;
@@ -30,7 +38,33 @@ namespace AplicacionAvisosEscolares.ViewModels
         public AvisosViewModel()
         {
             service = new AvisosService();
+
+            MostrarGeneralesCommand = new Command(() =>
+            {
+                VerGenerales = true;
+                VerPersonales = false;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VerGenerales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VerPersonales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ColorGenerales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ColorPersonales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TextoGenerales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TextoPersonales)));
+            });
+
+            MostrarPersonalesCommand = new Command(() =>
+            {
+                VerGenerales = false;
+                VerPersonales = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VerGenerales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VerPersonales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ColorGenerales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ColorPersonales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TextoGenerales)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TextoPersonales)));
+            });
+
             VerAvisoCommand = new Command<AvisoDTO>(async (aviso) => await VerAviso(aviso));
+
             Cargar();
         }
 
@@ -38,15 +72,26 @@ namespace AplicacionAvisosEscolares.ViewModels
         {
             int idAlumno = Preferences.Get("IdAlumno", 0);
 
-            await App.Current.MainPage.DisplayAlert("ID", idAlumno.ToString(), "OK");
-            // Marcar como leído en API
             await service.MarcarLeido(aviso.IdAviso, idAlumno);
 
-            // Actualizar en memoria (para UI)
             aviso.FechaLeido = DateTime.Now;
 
-            // Refrescar lista
-            Cargar();
+            if (aviso.TipoAviso == "GENERAL")
+            {
+                int index = Generales.IndexOf(aviso);
+                if (index >= 0)
+                {
+                    Generales[index] = aviso;
+                }
+            }
+            else
+            {
+                int index = Personales.IndexOf(aviso);
+                if (index >= 0)
+                {
+                    Personales[index] = aviso;
+                }
+            }
         }
 
         private async void Cargar()

@@ -23,8 +23,13 @@
                             <Label Text="{Binding Titulo}" FontAttributes="Bold"/>
                             <Label Text="{Binding Contenido}"/>
                             <Label Text="{Binding TipoAviso}" FontSize="12"/>
+                            <Button Text="Eliminar"
+        TextColor="Red"
+        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EliminarCommand}"
+        CommandParameter="{Binding .}" />
 
                         </VerticalStackLayout>
+                        
                     </Border>
 
                 </DataTemplate>

@@ -10,16 +10,4 @@ public partial class AvisosPage : ContentPage
 		InitializeComponent();
 		BindingContext = new ViewModels.AvisosViewModel();
     }
-
-    private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var aviso = e.CurrentSelection.FirstOrDefault() as AvisoDTO;
-
-        if (aviso == null) return;
-
-        var vm = BindingContext as AvisosViewModel;
-        vm?.VerAvisoCommand.Execute(aviso);
-
-        ((CollectionView)sender).SelectedItem = null;
-    }
 }

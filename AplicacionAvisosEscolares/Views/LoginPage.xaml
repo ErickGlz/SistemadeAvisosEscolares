@@ -2,18 +2,63 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AplicacionAvisosEscolares.Views.LoginPage"
-             Title="LoginPage">
-    <VerticalStackLayout Padding="30" Spacing="15">
+             Title="LoginPage" Background="#F5F5F5">
 
-        <Entry Placeholder="Matrícula"
-           Text="{Binding Matricula}" />
+    <ScrollView>
+        <VerticalStackLayout Padding="25" Spacing="20" VerticalOptions="Center">
 
-        <Entry Placeholder="Contraseña"
-           IsPassword="True"
-           Text="{Binding Password}" />
+            <Label Text="Bienvenido"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   TextColor="#1E88E5"
+                   HorizontalOptions="Center"/>
 
-        <Button Text="Iniciar Sesión"
-            Command="{Binding LoginCommand}" />
+            <Label Text="Inicia sesión para continuar"
+                   FontSize="14"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"/>
 
-    </VerticalStackLayout>
+            <Border BackgroundColor="White"
+                    Stroke="#E0E0E0"
+                    StrokeThickness="1"
+                    Padding="20">
+
+                <VerticalStackLayout Spacing="15">
+
+                    <Label Text="Matrícula / ID"
+                           FontSize="12"
+                           TextColor="Gray"/>
+
+                    <Entry Placeholder="Ej: A001 o 1"
+                           Text="{Binding Matricula}"
+                           BackgroundColor="#F9F9F9"
+                           TextColor="Black"/>
+
+                    <Label Text="Contraseña"
+                           FontSize="12"
+                           TextColor="Gray"/>
+
+                    <Entry Placeholder="••••••"
+                           IsPassword="True"
+                           Text="{Binding Password}"
+                           BackgroundColor="#F9F9F9"
+                           TextColor="Black"/>
+
+                    <Button Text="Iniciar Sesión"
+                            Command="{Binding LoginCommand}"
+                            BackgroundColor="#1E88E5"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"/>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="#1E88E5"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
