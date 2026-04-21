@@ -96,5 +96,17 @@ namespace SistemadeAvisosEscolares.Controllers
                 return NotFound();
             }
         }
+        [HttpGet("expirados/{idAlumno}")]
+        public IActionResult GetExpirados(int idAlumno)
+        {
+            var avisos = service.GetAvisosExpirados(idAlumno);
+
+            if (avisos == null || !avisos.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(avisos);
+        }
     }
 }

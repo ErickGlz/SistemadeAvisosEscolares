@@ -117,7 +117,35 @@ namespace SistemadeAvisosEscolares.Services
 
             repository.Delete(idAviso);
         }
+        public List<AvisoDTO> GetAvisosExpirados(int idAlumno)
+        {
+            var avisos = repository.Query()
+                .Where(x =>
+                    (x.TipoAviso == "GENERAL" && x.FechaCaducidad < DateTime.Now) ||
+                    (x.TipoAviso == "PERSONAL" && x.IdAlumno == idAlumno && x.FechaCaducidad < DateTime.Now))
+                .ToList();
 
+            var lista = new List<AvisoDTO>();
+
+            foreach (var aviso in avisos)
+            {
+                var dto = mapper.Map<AvisoDTO>(aviso);
+
+                dto.Maestro = repositoryMaestros.Query()
+                    .Where(x => x.IdMaestro == aviso.IdMaestro)
+                    .Select(x => x.Nombre)
+                    .FirstOrDefault() ?? "";
+
+                dto.FechaLeido = repositoryLeidos.Query()
+                    .Where(x => x.IdAviso == aviso.IdAviso && x.IdAlumno == idAlumno)
+                    .Select(x => x.FechaLeido)
+                    .FirstOrDefault();
+
+                lista.Add(dto);
+            }
+
+            return lista;
+        }
     }
 
 }
