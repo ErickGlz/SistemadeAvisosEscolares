@@ -2,34 +2,81 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AplicacionAvisosEscolares.Views.AvisoMaestroPage"
-             Title="AvisoMaestroPage">
-    <VerticalStackLayout>
+             BackgroundColor="#F5F5F5">
 
-        <Label Text="Avisos del Maestro"
-           FontSize="20"
-           HorizontalOptions="Center"/>
+    <Grid RowDefinitions="Auto,Auto,*">
 
-        <ActivityIndicator IsRunning="{Binding IsLoading}"
-                       IsVisible="{Binding IsLoading}" />
+        <VerticalStackLayout Padding="15" Spacing="5">
 
-        <CollectionView ItemsSource="{Binding Avisos}">
+            <Label Text="Panel del Maestro"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#1E88E5"/>
+
+            <Label Text="{Binding NombreMaestro}"
+                   FontSize="14"
+                   TextColor="Black"/>
+
+            <Label Text="{Binding Grupo}"
+                   FontSize="12"
+                   TextColor="Gray"/>
+
+        </VerticalStackLayout>
+
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           Color="#1E88E5"/>
+
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding Avisos}"
+                        SelectionMode="None">
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
 
-                    <Border Margin="10" Padding="10" Stroke="#ccc">
-                        <VerticalStackLayout>
+                    <Border Margin="10"
+                            Padding="12"
+                            Stroke="#E0E0E0"
+                            StrokeThickness="1"
+                            BackgroundColor="White">
 
-                            <Label Text="{Binding Titulo}" FontAttributes="Bold"/>
-                            <Label Text="{Binding Contenido}"/>
-                            <Label Text="{Binding TipoAviso}" FontSize="12"/>
+                        <Grid RowDefinitions="Auto,Auto,Auto"
+                              ColumnDefinitions="*,Auto">
+
+                            <Label Text="{Binding Titulo}"
+                                   FontAttributes="Bold"
+                                   FontSize="16"
+                                   TextColor="#212121"/>
+
+                            <Label Text="{Binding TipoAviso}"
+                                   Grid.Column="1"
+                                   FontSize="10"
+                                   BackgroundColor="#E3F2FD"
+                                   TextColor="#1E88E5"
+                                   Padding="5,2"/>
+
+                            <Label Text="{Binding Contenido}"
+                                   Grid.Row="1"
+                                   FontSize="13"
+                                   TextColor="#424242"/>
+
+                            <Label Text="{Binding FechaEnvio}"
+                                   Grid.Row="2"
+                                   FontSize="11"
+                                   TextColor="Gray"/>
+
                             <Button Text="Eliminar"
-        TextColor="Red"
-        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EliminarCommand}"
-        CommandParameter="{Binding .}" />
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    FontSize="12"
+                                    TextColor="Red"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EliminarCommand}"
+                                    CommandParameter="{Binding .}" />
 
-                        </VerticalStackLayout>
-                        
+                        </Grid>
+
                     </Border>
 
                 </DataTemplate>
@@ -37,8 +84,18 @@
 
         </CollectionView>
 
-        <Button Text="Crear Aviso"
-        Clicked="OnCrearAviso"/>
+        <Button Text="+"
+                Grid.RowSpan="3"
+                WidthRequest="60"
+                HeightRequest="60"
+                CornerRadius="30"
+                BackgroundColor="#1E88E5"
+                TextColor="White"
+                FontSize="28"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="20"
+                Clicked="OnCrearAviso"/>
 
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>
