@@ -1,4 +1,5 @@
-﻿using SistemadeAvisosEscolares.Models.Entities;
+﻿
+using SistemadeAvisosEscolaresApi.Models.Entities;
 
 namespace SistemadeAvisosEscolares.Repositories
 {

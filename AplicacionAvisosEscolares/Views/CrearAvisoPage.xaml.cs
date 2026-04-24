@@ -8,6 +8,10 @@ public partial class CrearAvisoPage : ContentPage
 	{
 		InitializeComponent();
         BindingContext = new CrearAvisoViewModel();
+    }
 
+    private async void OnBackTapped(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 }

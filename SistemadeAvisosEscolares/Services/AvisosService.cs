@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using SistemadeAvisosEscolares.Models.DTOs;
-using SistemadeAvisosEscolares.Models.Entities;
 using SistemadeAvisosEscolares.Models.Validators;
 using SistemadeAvisosEscolares.Repositories;
+using SistemadeAvisosEscolaresApi.Models.Entities;
 
 namespace SistemadeAvisosEscolares.Services
 {

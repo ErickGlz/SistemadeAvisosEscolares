@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SistemadeAvisosEscolares.Models.Entities;
+namespace SistemadeAvisosEscolaresApi.Models.Entities;
 
 public partial class Maestros
 {
@@ -12,4 +12,6 @@ public partial class Maestros
     public string? Password { get; set; }
 
     public string? Grupo { get; set; }
+
+    public virtual ICollection<Alumnos> Alumnos { get; set; } = new List<Alumnos>();
 }

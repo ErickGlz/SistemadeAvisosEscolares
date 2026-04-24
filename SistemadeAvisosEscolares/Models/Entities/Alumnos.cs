@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SistemadeAvisosEscolares.Models.Entities;
+namespace SistemadeAvisosEscolaresApi.Models.Entities;
 
 public partial class Alumnos
 {
@@ -12,4 +12,8 @@ public partial class Alumnos
     public string? Matricula { get; set; }
 
     public string? Password { get; set; }
+
+    public int? IdMaestro { get; set; }
+
+    public virtual Maestros? IdMaestroNavigation { get; set; }
 }

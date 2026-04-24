@@ -1,8 +1,8 @@
-using SistemadeAvisosEscolares.Models.Entities;
 using SistemadeAvisosEscolares.Repositories;
 using SistemadeAvisosEscolares.Services;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
+using SistemadeAvisosEscolaresApi.Models.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();

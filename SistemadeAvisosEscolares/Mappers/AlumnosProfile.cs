@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SistemadeAvisosEscolares.Models.DTOs;
-using SistemadeAvisosEscolares.Models.Entities;
+using SistemadeAvisosEscolaresApi.Models.Entities;
 
 namespace SistemadeAvisosEscolares.Mappers
 {

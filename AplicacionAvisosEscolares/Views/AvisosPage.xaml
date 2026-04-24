@@ -2,147 +2,190 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AplicacionAvisosEscolares.Views.AvisosPage"
-             xmlns:converters="clr-namespace:AplicacionAvisosEscolares.Converters"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:NoLeidoConverter x:Key="NoLeido"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+    <Grid RowDefinitions="Auto,*">
 
-    <VerticalStackLayout Padding="15" Spacing="10">
+        <Grid Padding="15" ColumnDefinitions="*,Auto">
 
-        <Label Text="Avisos"
-               FontSize="26"
-               FontAttributes="Bold"
-               TextColor="#1E88E5"/>
+            <Label Text="Avisos"
+                   FontSize="26"
+                   FontAttributes="Bold"
+                   TextColor="#1E88E5"/>
 
-        <Grid ColumnDefinitions="*,*" Padding="4">
+            <Image Source="logout.png"
+                   HeightRequest="28"
+                   WidthRequest="28"
+                   Grid.Column="1" Margin="5">
 
-            <Button Text="Generales"
-            Command="{Binding MostrarGeneralesCommand}"
-            BackgroundColor="{Binding ColorGenerales}"
-            TextColor="{Binding TextoGenerales}"
-            CornerRadius="10"/>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnLogoutTapped"/>
+                </Image.GestureRecognizers>
 
-            <Button Text="Personales"
-            Grid.Column="1"
-            Command="{Binding MostrarPersonalesCommand}"
-            BackgroundColor="{Binding ColorPersonales}"
-            TextColor="{Binding TextoPersonales}"
-            CornerRadius="10"/>
+            </Image>
 
         </Grid>
 
-        <ActivityIndicator IsRunning="{Binding IsLoading}"
-                           IsVisible="{Binding IsLoading}"
-                           Color="#1E88E5"/>
+        <VerticalStackLayout Grid.Row="1" Padding="15" Spacing="12">
 
-        <CollectionView ItemsSource="{Binding Generales}"
-                        IsVisible="{Binding VerGenerales}"
-                        SelectionMode="None">
+            <Border BackgroundColor="#FFF3E0"
+                    Stroke="#FF9800"
+                    StrokeThickness="1"
+                    Padding="8"
+                    HorizontalOptions="Start"
+                    StrokeShape="RoundRectangle 20">
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <Label Text="Filtrar No leídos"
+                       TextColor="#E65100"
+                       FontSize="12">
 
-                    <Border Stroke="#E0E0E0"
-                            StrokeThickness="1"
-                            Padding="12"
-                            Margin="5"
-                            BackgroundColor="White">
-                        
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.VerAvisoCommand}"
-                                CommandParameter="{Binding .}" />
-                        </Border.GestureRecognizers>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NoLeidosCommand}"/>
+                    </Label.GestureRecognizers>
 
-                        <Grid RowDefinitions="Auto,Auto,Auto"
-                              ColumnDefinitions="*,Auto">
+                </Label>
 
-                            <Label Text="{Binding Titulo}"
-                                   FontAttributes="Bold"
-                                   FontSize="15"
-                                   TextColor="#212121"/>
+            </Border>
 
-                            <Label Text="{Binding FechaEnvio}"
-                                   Grid.Column="1"
-                                   FontSize="10"
-                                   TextColor="Gray"/>
+            <Grid ColumnDefinitions="*,*" Padding="4">
 
-                            <Label Text="{Binding Contenido}"
-                                   Grid.Row="1"
-                                   FontSize="13"
-                                   TextColor="#424242"/>
+                <Button Text="Generales"
+                        Command="{Binding MostrarGeneralesCommand}"
+                        BackgroundColor="{Binding ColorGenerales}"
+                        TextColor="{Binding TextoGenerales}"
+                        CornerRadius="10"/>
 
-                            <Label Text="{Binding Maestro}"
-                                   Grid.Row="2"
-                                   FontSize="11"
-                                   TextColor="#757575"/>
+                <Button Text="Personales"
+                        Grid.Column="1"
+                        Command="{Binding MostrarPersonalesCommand}"
+                        BackgroundColor="{Binding ColorPersonales}"
+                        TextColor="{Binding TextoPersonales}"
+                        CornerRadius="10"/>
 
-                        </Grid>
+            </Grid>
 
-                    </Border>
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="#1E88E5"/>
 
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
+            <CollectionView ItemsSource="{Binding Generales}"
+                            IsVisible="{Binding VerGenerales}"
+                            SelectionMode="None">
 
-        </CollectionView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
 
-        <CollectionView ItemsSource="{Binding Personales}"
-                        IsVisible="{Binding VerPersonales}"
-                        SelectionMode="None">
+                        <Border Stroke="#E0E0E0"
+                                StrokeThickness="1"
+                                Padding="12"
+                                Margin="5"
+                                BackgroundColor="White">
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.VerAvisoCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
 
-                    <Border Stroke="#E0E0E0"
-                            StrokeThickness="1"
-                            Padding="12"
-                            Margin="5"
-                            BackgroundColor="White">
-                        
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.VerAvisoCommand}"
-                                CommandParameter="{Binding .}" />
-                        </Border.GestureRecognizers>
+                            <Grid RowDefinitions="Auto,Auto,Auto"
+                                 ColumnDefinitions="*,Auto">
 
-                        <Grid RowDefinitions="Auto,Auto,Auto"
-                              ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding Titulo}"
+                                       FontAttributes="Bold"
+                                       FontSize="15"
+                                       TextColor="#212121"/>
 
-                            <Label Text="{Binding Titulo}"
-                                   FontAttributes="Bold"
-                                   FontSize="15"
-                                   TextColor="#212121"/>
+                                <Border Grid.Column="1"
+                                        BackgroundColor="#E53935"
+                                        Padding="6,2"
+                                        StrokeThickness="0"
+                                        IsVisible="{Binding NoLeido}"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Start">
 
-                            <Label Text="Nuevo"
-                                   BackgroundColor="#E53935"
-                                   TextColor="White"
-                                   Padding="6,2"
-                                   FontSize="10"
-                                   Grid.Column="1"
-                                   IsVisible="{Binding FechaLeido, Converter={StaticResource NoLeido}}"/>
+                                    <Label Text="Nuevo"
+                                    TextColor="White"
+                                    FontSize="10"/>
+                                    
+                                </Border>
 
-                            <Label Text="{Binding Contenido}"
-                                   Grid.Row="1"
-                                   FontSize="13"
-                                   TextColor="#424242"/>
+                                <Label Text="{Binding Contenido}"
+                                       Grid.Row="1"
+                                       Grid.ColumnSpan="2"
+                                       FontSize="13"
+                                       TextColor="#424242"/>
 
-                            <Label Text="{Binding Maestro}"
-                                   Grid.Row="2"
-                                   FontSize="11"
-                                   TextColor="#757575"/>
+                                <Label Text="{Binding Maestro}"
+                                       Grid.Row="2"
+                                       Grid.ColumnSpan="2"
+                                       FontSize="11"
+                                       TextColor="#757575"/>
 
-                        </Grid>
+                            </Grid>
 
-                    </Border>
+                        </Border>
 
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
 
-        </CollectionView>
+            </CollectionView>
 
-    </VerticalStackLayout>
+            <CollectionView ItemsSource="{Binding Personales}"
+                            IsVisible="{Binding VerPersonales}"
+                            SelectionMode="None">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                        <Border Stroke="#E0E0E0"
+                                StrokeThickness="1"
+                                Padding="12"
+                                Margin="5"
+                                BackgroundColor="White">
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.VerAvisoCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+
+                            <Grid RowDefinitions="Auto,Auto,Auto"
+                                  ColumnDefinitions="*,Auto">
+
+                                <Label Text="{Binding Titulo}"
+                                       FontAttributes="Bold"
+                                       FontSize="15"
+                                       TextColor="#212121"/>
+
+                                <Label Text="Nuevo"
+                                       BackgroundColor="#E53935"
+                                       TextColor="White"
+                                       Padding="6,2"
+                                       FontSize="10"
+                                       Grid.Column="1"
+                                       IsVisible="{Binding NoLeido}"/>
+
+                                <Label Text="{Binding Contenido}"
+                                       Grid.Row="1"
+                                       FontSize="13"
+                                       TextColor="#424242"/>
+
+                                <Label Text="{Binding Maestro}"
+                                       Grid.Row="2"
+                                       FontSize="11"
+                                       TextColor="#757575"/>
+
+                            </Grid>
+
+                        </Border>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </VerticalStackLayout>
+
+    </Grid>
 </ContentPage>

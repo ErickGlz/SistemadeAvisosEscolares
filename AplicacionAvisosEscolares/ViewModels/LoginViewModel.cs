@@ -8,14 +8,14 @@ namespace AplicacionAvisosEscolares.ViewModels
 {
     public class LoginViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public string Matricula { get; set; }
         public string Password { get; set; }
 
         public Command LoginCommand { get; }
 
         AvisosService service;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         public LoginViewModel()
         {
@@ -44,6 +44,7 @@ namespace AplicacionAvisosEscolares.ViewModels
                 {
                     Preferences.Set("TipoUsuario", "Maestro");
                     Preferences.Set("IdMaestro", maestro.IdMaestro);
+                    Preferences.Set("Grupo", maestro.Grupo);
 
                     await Shell.Current.GoToAsync("AvisoMaestroPage");
                     return;

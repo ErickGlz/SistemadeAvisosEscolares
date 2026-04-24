@@ -2,62 +2,84 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AplicacionAvisosEscolares.Views.CrearAvisoPage"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
+    <Grid RowDefinitions="Auto,*">
+
+        <Grid Padding="15" ColumnDefinitions="Auto,*" BackgroundColor="#F5F5F5">
+
+            <Image Source="back.png"
+                   HeightRequest="30"
+                   WidthRequest="30" Margin="5">
+
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped"/>
+                </Image.GestureRecognizers>
+
+            </Image>
 
             <Label Text="Crear Aviso"
-                   FontSize="26"
+                   Grid.Column="1"
+                   FontSize="22"
                    FontAttributes="Bold"
+                   VerticalOptions="Center"
                    TextColor="#1E88E5"/>
 
-            <Border BackgroundColor="White"
-                    Stroke="#E0E0E0"
-                    StrokeThickness="1"
-                    Padding="15">
+        </Grid>
 
-                <VerticalStackLayout Spacing="15">
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="20">
 
-                    <Label Text="Título"
-                           FontSize="12"
-                           TextColor="Gray"/>
+                <Border BackgroundColor="White"
+                        Stroke="#E0E0E0"
+                        StrokeThickness="1"
+                        Padding="15"
+                        StrokeShape="RoundRectangle 15">
 
-                    <Entry Placeholder="Ej: Reunión mañana"
-                           Text="{Binding Titulo}"
-                           BackgroundColor="#F9F9F9"
-                           TextColor="Black"/>
+                    <VerticalStackLayout Spacing="15">
 
-                    <Label Text="Contenido"
-                           FontSize="12"
-                           TextColor="Gray"/>
+                        <Label Text="Título"
+                               FontSize="12"
+                               TextColor="Gray"/>
 
-                    <Editor Placeholder="Escribe el aviso..."
-                            HeightRequest="120"
-                            Text="{Binding Contenido}"
-                            BackgroundColor="#F9F9F9"
-                            TextColor="Black"/>
+                        <Entry Placeholder="Ej: Reunión mañana"
+                               Text="{Binding Titulo}"
+                               BackgroundColor="#F9F9F9"
+                               TextColor="Black"/>
 
-                    <Label Text="Matrícula (opcional)"
-                           FontSize="12"
-                           TextColor="Gray"/>
+                        <Label Text="Contenido"
+                               FontSize="12"
+                               TextColor="Gray"/>
 
-                    <Entry Placeholder="Dejar vacío = aviso general"
-                           Text="{Binding MatriculaAlumno}"
-                           BackgroundColor="#F9F9F9"
-                           TextColor="Black"/>
+                        <Editor Placeholder="Escribe el aviso..."
+                                HeightRequest="120"
+                                Text="{Binding Contenido}"
+                                BackgroundColor="#F9F9F9"
+                                TextColor="Black"/>
 
-                </VerticalStackLayout>
+                        <Label Text="Matrícula (opcional)"
+                               FontSize="12"
+                               TextColor="Gray"/>
 
-            </Border>
+                        <Entry Placeholder="Dejar vacío = aviso general"
+                               Text="{Binding MatriculaAlumno}"
+                               BackgroundColor="#F9F9F9"
+                               TextColor="Black"/>
 
-            <Button Text="Crear Aviso"
-                    Command="{Binding CrearCommand}"
-                    BackgroundColor="#1E88E5"
-                    TextColor="White"
-                    CornerRadius="10"
-                    HeightRequest="50"/>
+                    </VerticalStackLayout>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                </Border>
+
+                <Button Text="Crear Aviso"
+                        Command="{Binding CrearCommand}"
+                        BackgroundColor="#1E88E5"
+                        TextColor="White"
+                        CornerRadius="12"
+                        HeightRequest="50"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
 </ContentPage>

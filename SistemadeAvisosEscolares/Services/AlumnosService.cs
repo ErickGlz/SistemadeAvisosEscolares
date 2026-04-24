@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SistemadeAvisosEscolares.Models.DTOs;
-using SistemadeAvisosEscolares.Models.Entities;
 using SistemadeAvisosEscolares.Repositories;
+using SistemadeAvisosEscolaresApi.Models.Entities;
 
 namespace SistemadeAvisosEscolares.Services
 {

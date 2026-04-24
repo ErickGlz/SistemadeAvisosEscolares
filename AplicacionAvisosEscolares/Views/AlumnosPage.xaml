@@ -1,0 +1,80 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AplicacionAvisosEscolares.Views.AlumnosPage"
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Grid Padding="15" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+
+            <Image Source="back.png" HeightRequest="28">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped"/>
+                </Image.GestureRecognizers>
+            </Image>
+
+            <Label Text="Alumnos"
+           Grid.Column="1"
+           FontSize="22"
+           FontAttributes="Bold"
+           HorizontalOptions="Center"
+           TextColor="#1E88E5"/>
+
+            <Label Text="{Binding Grupo}"
+           Grid.Row="1"
+           Grid.Column="1"
+           FontSize="13"
+           TextColor="Gray"
+           HorizontalOptions="Center"/>
+
+        </Grid>
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Alumnos}"
+                        SelectionMode="None">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border Margin="10"
+                            Padding="15"
+                            BackgroundColor="White"
+                            Stroke="#E0E0E0"
+                            StrokeThickness="1">
+
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAlumnoTapped"/>
+                        </Border.GestureRecognizers>
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <VerticalStackLayout>
+
+                                <Label Text="{Binding Nombre}"
+                                       FontAttributes="Bold"
+                                       FontSize="15"
+                                       TextColor="#212121"/>
+
+                                <Label Text="{Binding Matricula}"
+                                       FontSize="12"
+                                       TextColor="Gray"/>
+
+                            </VerticalStackLayout>
+
+                            <Label Text="👤"
+                                   Grid.Column="1"
+                                   FontSize="20"
+                                   VerticalOptions="Center"/>
+
+                        </Grid>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

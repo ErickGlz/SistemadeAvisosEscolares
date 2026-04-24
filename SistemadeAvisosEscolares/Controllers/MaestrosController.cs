@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SistemadeAvisosEscolares.Models.DTOs;
+using SistemadeAvisosEscolares.Repositories;
 using SistemadeAvisosEscolares.Services;
 
 namespace SistemadeAvisosEscolares.Controllers
@@ -52,6 +53,24 @@ namespace SistemadeAvisosEscolares.Controllers
             }
 
             return Ok(avisos);
+        }
+
+        [HttpGet("{idMaestro}/alumnos")]
+        public IActionResult GetAlumnos(int idMaestro)
+        {
+            try
+            {
+                var alumnos = service.GetAlumnos(idMaestro);
+
+                if (alumnos == null || !alumnos.Any())
+                    return NotFound();
+
+                return Ok(alumnos);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }

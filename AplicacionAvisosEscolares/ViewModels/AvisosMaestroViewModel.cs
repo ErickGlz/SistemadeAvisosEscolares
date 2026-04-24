@@ -11,6 +11,8 @@ namespace AplicacionAvisosEscolares.ViewModels
 {
     public class AvisosMaestroViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public ObservableCollection<AvisoDTO> Avisos { get; set; } = new();
 
         private bool isLoading;
@@ -26,22 +28,23 @@ namespace AplicacionAvisosEscolares.ViewModels
 
         AvisosService service;
 
-        public ICommand EliminarCommand { get; }
+        public ICommand EliminarCommand { get; set; }
 
         public AvisosMaestroViewModel()
         {
             service = new AvisosService();
-            EliminarCommand = new Command<AvisoDTO>(async (aviso) => await Eliminar(aviso));
+            EliminarCommand = new Command<AvisoDTO>(OnEliminar);
             Cargar();
+        }
+
+        private async void OnEliminar(AvisoDTO aviso)
+        {
+            await Eliminar(aviso);
         }
 
         private async Task Eliminar(AvisoDTO aviso)
         {
-            bool confirm = await App.Current.MainPage.DisplayAlert(
-                "Confirmar",
-                "¿Eliminar este aviso?",
-                "Sí",
-                "No");
+            bool confirm = await App.Current.MainPage.DisplayAlert("Confirmar", "¿Eliminar este aviso?","Sí","No");
 
             if (!confirm) return;
 
@@ -58,7 +61,7 @@ namespace AplicacionAvisosEscolares.ViewModels
             }
         }
 
-        private async void Cargar()
+        public async void Cargar()
         {
             IsLoading = true;
 
@@ -73,6 +76,5 @@ namespace AplicacionAvisosEscolares.ViewModels
             IsLoading = false;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

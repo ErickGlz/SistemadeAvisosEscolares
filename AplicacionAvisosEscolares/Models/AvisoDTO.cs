@@ -13,6 +13,10 @@ namespace AplicacionAvisosEscolares.Models
         public string TipoAviso { get; set; } = null!;
         public DateTime FechaEnvio { get; set; }
         public DateTime? FechaLeido { get; set; }
+        public bool NoLeido
+        {
+            get { return FechaLeido == null; }
+        }
     }
 
     public class CrearAvisoDTO

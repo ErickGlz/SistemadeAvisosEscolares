@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SistemadeAvisosEscolares.Models.DTOs;
-using SistemadeAvisosEscolares.Models.Entities;
 using SistemadeAvisosEscolares.Repositories;
+using SistemadeAvisosEscolaresApi.Models.Entities;
 
 namespace SistemadeAvisosEscolares.Services
 {
@@ -9,15 +9,18 @@ namespace SistemadeAvisosEscolares.Services
     {
         private readonly Repository<Maestros> repository;
         private readonly Repository<Avisos> avisosRepository;
+        private readonly Repository<Alumnos> repositoryAlumnos;
         private readonly IMapper mapper;
 
         public MaestrosService(
             Repository<Maestros> repository,
             Repository<Avisos> avisosRepository,
+            Repository<Alumnos> repositoryAlumnos,
             IMapper mapper)
         {
             this.repository = repository;
             this.avisosRepository = avisosRepository;
+            this.repositoryAlumnos = repositoryAlumnos;
             this.mapper = mapper;
         }
 
@@ -43,6 +46,14 @@ namespace SistemadeAvisosEscolares.Services
             }
 
             return mapper.Map<MaestroDTO>(maestro);
+        }
+
+        public List<AlumnoDTO> GetAlumnos(int idMaestro)
+        {
+            return repositoryAlumnos.Query()
+                .Where(a => a.IdMaestro == idMaestro)
+                .Select(a => mapper.Map<AlumnoDTO>(a))
+                .ToList();
         }
     }
 }

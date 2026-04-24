@@ -2,26 +2,41 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AplicacionAvisosEscolares.Views.AvisoMaestroPage"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
 
     <Grid RowDefinitions="Auto,Auto,*">
 
-        <VerticalStackLayout Padding="15" Spacing="5">
+        <Grid Padding="15" ColumnDefinitions="*,Auto,Auto">
 
             <Label Text="Panel del Maestro"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   TextColor="#1E88E5"/>
+           FontSize="24"
+           FontAttributes="Bold"
+           TextColor="#1E88E5"
+           VerticalOptions="Center"/>
 
-            <Label Text="{Binding NombreMaestro}"
-                   FontSize="14"
-                   TextColor="Black"/>
+            <Image Source="students.png"
+           Grid.Column="1"
+           HeightRequest="26"
+           VerticalOptions="Center"
+           Margin="0,0,10,0">
 
-            <Label Text="{Binding Grupo}"
-                   FontSize="12"
-                   TextColor="Gray"/>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnAlumnosTapped"/>
+                </Image.GestureRecognizers>
+            </Image>
 
-        </VerticalStackLayout>
+            <Image Source="logout.png"
+           Grid.Column="2"
+           HeightRequest="26"
+           VerticalOptions="Center">
+
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnLogoutTapped"/>
+                </Image.GestureRecognizers>
+            </Image>
+
+        </Grid>
 
         <ActivityIndicator Grid.Row="1"
                            IsRunning="{Binding IsLoading}"

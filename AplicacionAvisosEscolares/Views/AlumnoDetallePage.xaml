@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AplicacionAvisosEscolares.Views.AlumnoDetallePage"
+             BackgroundColor="#F5F5F5"
+             Title="AlumnoDetallePage">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Grid Padding="15" ColumnDefinitions="Auto,*">
+
+            <Image Source="back.png" HeightRequest="28">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped"/>
+                </Image.GestureRecognizers>
+            </Image>
+
+            <VerticalStackLayout Grid.Column="1">
+
+                <Label Text="{Binding Nombre}"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#1E88E5"/>
+
+                <Label Text="{Binding Matricula}"
+                       FontSize="12"
+                       TextColor="Gray"/>
+
+            </VerticalStackLayout>
+
+        </Grid>
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Avisos}">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border Margin="10"
+                            Padding="12"
+                            Stroke="#E0E0E0"
+                            StrokeThickness="1"
+                            BackgroundColor="White">
+
+                        <VerticalStackLayout>
+
+                            <Label Text="{Binding Titulo}"
+                                   FontAttributes="Bold"
+                                   TextColor="#424242"/>
+
+                            <Label Text="{Binding Contenido}"
+                                   TextColor="#424242"/>
+
+                            <Label Text="{Binding TipoAviso}"
+                                   FontSize="10"
+                                   TextColor="Red"/>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

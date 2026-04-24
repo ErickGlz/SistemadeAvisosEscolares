@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AplicacionAvisosEscolares.Views.AvisoDetallePage"
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Grid Padding="15" ColumnDefinitions="Auto,*">
+
+            <Image Source="back.png"
+                   HeightRequest="28"
+                   WidthRequest="28" Margin="5">
+
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped"/>
+                </Image.GestureRecognizers>
+
+            </Image>
+
+            <Label Text="Detalle"
+                   Grid.Column="1"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   TextColor="#1E88E5"/>
+
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="15">
+
+                <Label Text="{Binding Titulo}"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="#212121"/>
+
+                <Label Text="{Binding TipoAviso}"
+                       BackgroundColor="#E3F2FD"
+                       TextColor="#1E88E5"
+                       Padding="6,2"
+                       FontSize="12"
+                       HorizontalOptions="Start"/>
+
+                <Label Text="Enviado por:"
+                       FontSize="12"
+                       TextColor="Gray"/>
+
+                <Label Text="{Binding Maestro}"
+                       FontSize="14"
+                       TextColor="Black"/>
+
+                <Label Text="{Binding FechaEnvio}"
+                       FontSize="12"
+                       TextColor="Gray"/>
+
+                <Border BackgroundColor="White"
+                        Stroke="#E0E0E0"
+                        StrokeThickness="1"
+                        Padding="15"
+                        StrokeShape="RoundRectangle 12">
+
+                    <Label Text="{Binding Contenido}"
+                           FontSize="15"
+                           TextColor="#424242"/>
+
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

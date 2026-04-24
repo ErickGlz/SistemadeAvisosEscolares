@@ -9,10 +9,12 @@ namespace AplicacionAvisosEscolares.ViewModels
 {
     public class CrearAvisoViewModel : INotifyPropertyChanged
     {
-        public string Titulo { get; set; }
-        public string Contenido { get; set; }
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public string? Titulo { get; set; }
+        public string? Contenido { get; set; }
         public string TipoAviso { get; set; } = "GENERAL";
-        public string MatriculaAlumno { get; set; }
+        public string? MatriculaAlumno { get; set; }
 
         public Command CrearCommand { get; }
 
@@ -68,6 +70,5 @@ namespace AplicacionAvisosEscolares.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

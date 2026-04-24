@@ -11,6 +11,7 @@ namespace AplicacionAvisosEscolares
             Routing.RegisterRoute("AvisosPage", typeof(AvisosPage));
             Routing.RegisterRoute("AvisoMaestroPage", typeof(AvisoMaestroPage));
             Routing.RegisterRoute("CrearAvisoPage", typeof(CrearAvisoPage));
+            Routing.RegisterRoute("AvisoDetallePage", typeof(AvisoDetallePage));
         }
     }
 }

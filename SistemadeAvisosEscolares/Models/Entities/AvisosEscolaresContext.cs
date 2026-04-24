@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
-namespace SistemadeAvisosEscolares.Models.Entities;
+namespace SistemadeAvisosEscolaresApi.Models.Entities;
 
 public partial class AvisosEscolaresContext : DbContext
 {
@@ -26,7 +26,7 @@ public partial class AvisosEscolaresContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;user=root;password=root;database=AvisosEscolares", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.36-mysql"));
+        => optionsBuilder.UseMySql("server=localhost;user=root;password=root;database=AvisosEscolares;port=3306", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.36-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,9 +40,15 @@ public partial class AvisosEscolaresContext : DbContext
 
             entity.ToTable("alumnos");
 
+            entity.HasIndex(e => e.IdMaestro, "FK_Alumnos_Maestros");
+
             entity.Property(e => e.Matricula).HasMaxLength(50);
             entity.Property(e => e.Nombre).HasMaxLength(100);
             entity.Property(e => e.Password).HasMaxLength(100);
+
+            entity.HasOne(d => d.IdMaestroNavigation).WithMany(p => p.Alumnos)
+                .HasForeignKey(d => d.IdMaestro)
+                .HasConstraintName("FK_Alumnos_Maestros");
         });
 
         modelBuilder.Entity<Avisos>(entity =>

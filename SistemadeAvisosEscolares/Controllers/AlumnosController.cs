@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SistemadeAvisosEscolares.Models.DTOs;
-using SistemadeAvisosEscolares.Models.Entities;
 using SistemadeAvisosEscolares.Repositories;
 using SistemadeAvisosEscolares.Services;
 

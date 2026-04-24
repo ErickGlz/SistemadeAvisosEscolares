@@ -123,6 +123,19 @@ namespace AplicacionAvisosEscolares.Services
                 var response = await client.DeleteAsync($"api/Avisos/{idAviso}");
                 return response.IsSuccessStatusCode;
             }
+
+            public async Task<List<AlumnoDTO>> GetAlumnos(int idMaestro)
+            {
+                var response = await client.GetAsync($"api/maestros/{idMaestro}/alumnos");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var lista = await response.Content.ReadFromJsonAsync<List<AlumnoDTO>>();
+                    return lista ?? new List<AlumnoDTO>();
+                }
+
+                return new List<AlumnoDTO>();
+            }
         }
     }
 }

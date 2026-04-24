@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SistemadeAvisosEscolares.Models.Entities;
+namespace SistemadeAvisosEscolaresApi.Models.Entities;
 
 public partial class Avisosalumnos
 {
