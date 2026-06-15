@@ -1,5 +1,5 @@
 ﻿using AplicacionAvisosEscolares.Models;
-using AplicacionAvisosEscolares.Services.AvisosApp.Services;
+using AplicacionAvisosEscolares.Services;
 using AplicacionAvisosEscolares.Views;
 using System.Collections.ObjectModel;
 using System.Timers;
@@ -95,54 +95,80 @@ namespace AplicacionAvisosEscolares.ViewModels
 
         private async Task VerAviso(AvisoDTO aviso)
         {
-            int idAlumno = Preferences.Get("IdAlumno", 0);
-
-            await service.MarcarLeido(aviso.IdAviso, idAlumno);
-
-            aviso.FechaLeido = DateTime.Now;
-
-            if (aviso.TipoAviso == "GENERAL")
+            try
             {
-                int index = Generales.IndexOf(aviso);
-                if (index >= 0)
+                int idAlumno = Preferences.Get("IdAlumno", 0);
+
+                await service.MarcarLeido(aviso.IdAviso, idAlumno);
+
+                aviso.FechaLeido = DateTime.Now;
+
+                if (aviso.TipoAviso == "GENERAL")
                 {
-                    Generales[index] = aviso;
+                    int index = Generales.IndexOf(aviso);
+                    if (index >= 0)
+                    {
+                        Generales[index] = aviso;
+                    }
                 }
+                else
+                {
+                    int index = Personales.IndexOf(aviso);
+                    if (index >= 0)
+                    {
+                        Personales[index] = aviso;
+                    }
+                }
+                await App.Current.MainPage.Navigation.PushAsync(new AvisoDetallePage(aviso));
             }
-            else
+            catch (ApiConnectionException)
             {
-                int index = Personales.IndexOf(aviso);
-                if (index >= 0)
-                {
-                    Personales[index] = aviso;
-                }
+                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se puede conectar con el servidor. No se pudo marcar el aviso como leído.", "OK");
+                await App.Current.MainPage.Navigation.PushAsync(new AvisoDetallePage(aviso));
             }
-            await App.Current.MainPage.Navigation.PushAsync(new AvisoDetallePage(aviso));
+            catch (Exception)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado.", "OK");
+                await App.Current.MainPage.Navigation.PushAsync(new AvisoDetallePage(aviso));
+            }
         }
 
         private async void Cargar()
         {
-            IsLoading = true;
-
-            int idAlumno = Preferences.Get("IdAlumno", 0);
-
-            var lista = await service.GetAvisosAlumno(idAlumno) ?? new List<AvisoDTO>();
-
-            Generales.Clear();
-            Personales.Clear();
-
-            foreach (var item in lista)
+            try
             {
-                if (SoloNoLeidos && item.FechaLeido != null)
-                    continue;
+                IsLoading = true;
 
-                if (item.TipoAviso == "GENERAL")
-                    Generales.Add(item);
-                else
-                    Personales.Add(item);
+                int idAlumno = Preferences.Get("IdAlumno", 0);
+
+                var lista = await service.GetAvisosAlumno(idAlumno) ?? new List<AvisoDTO>();
+
+                Generales.Clear();
+                Personales.Clear();
+
+                foreach (var item in lista)
+                {
+                    if (SoloNoLeidos && item.FechaLeido != null)
+                        continue;
+
+                    if (item.TipoAviso == "GENERAL")
+                        Generales.Add(item);
+                    else
+                        Personales.Add(item);
+                }
             }
-
-            IsLoading = false;
+            catch (ApiConnectionException)
+            {
+                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se pudieron cargar los avisos. Verifica tu conexión.", "OK");
+            }
+            catch (Exception)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado al cargar los avisos.", "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private void OnMostrarGenerales()
@@ -190,19 +216,30 @@ namespace AplicacionAvisosEscolares.ViewModels
 
         private async Task RecargarSilencioso()
         {
-            int idAlumno = Preferences.Get("IdAlumno", 0);
-
-            var lista = await service.GetAvisosAlumno(idAlumno) ?? new List<AvisoDTO>();
-
-            Generales.Clear();
-            Personales.Clear();
-
-            foreach (var item in lista)
+            try
             {
-                if (item.TipoAviso == "GENERAL")
-                    Generales.Add(item);
-                else
-                    Personales.Add(item);
+                int idAlumno = Preferences.Get("IdAlumno", 0);
+
+                var lista = await service.GetAvisosAlumno(idAlumno) ?? new List<AvisoDTO>();
+
+                Generales.Clear();
+                Personales.Clear();
+
+                foreach (var item in lista)
+                {
+                    if (item.TipoAviso == "GENERAL")
+                        Generales.Add(item);
+                    else
+                        Personales.Add(item);
+                }
+            }
+            catch (ApiConnectionException)
+            {
+                Console.WriteLine("Error de conexión");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Error inesperado en conexión");
             }
         }
     }

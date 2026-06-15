@@ -1,5 +1,5 @@
 ﻿using AplicacionAvisosEscolares.Models;
-using AplicacionAvisosEscolares.Services.AvisosApp.Services;
+using AplicacionAvisosEscolares.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,20 +35,36 @@ namespace AplicacionAvisosEscolares.ViewModels
 
         public async void Cargar()
         {
-            IsLoading = true;
-
-            int idMaestro = Preferences.Get("IdMaestro", 0);
-
-            var lista = await service.GetAlumnos(idMaestro);
-
-            Alumnos.Clear();
-
-            foreach (var item in lista)
+            try
             {
-                Alumnos.Add(item);
-            }
+                IsLoading = true;
 
-            IsLoading = false;
+                int idMaestro = Preferences.Get("IdMaestro", 0);
+
+                var lista = await service.GetAlumnos(idMaestro);
+
+                Alumnos.Clear();
+
+                if(lista!= null)
+                {
+                    foreach (var item in lista)
+                    {
+                        Alumnos.Add(item);
+                    }
+                }
+            }
+            catch (ApiConnectionException)
+            {
+                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se pudieron cargar los alumnos. Verifica tu conexión a internet.", "OK");
+            }
+            catch (Exception)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado al cargar los alumnos.", "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

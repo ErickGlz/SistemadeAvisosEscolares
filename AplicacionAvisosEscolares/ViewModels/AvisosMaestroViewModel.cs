@@ -1,5 +1,5 @@
 ﻿using AplicacionAvisosEscolares.Models;
-using AplicacionAvisosEscolares.Services.AvisosApp.Services;
+using AplicacionAvisosEscolares.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,37 +44,65 @@ namespace AplicacionAvisosEscolares.ViewModels
 
         private async Task Eliminar(AvisoDTO aviso)
         {
-            bool confirm = await App.Current.MainPage.DisplayAlert("Confirmar", "¿Eliminar este aviso?","Sí","No");
-
-            if (!confirm) return;
-
-            var ok = await service.EliminarAviso(aviso.IdAviso);
-
-            if (ok)
+            try
             {
-                Avisos.Remove(aviso);
-                Cargar();
+                bool confirm = await App.Current.MainPage.DisplayAlert("Confirmar", "¿Eliminar este aviso?", "Sí", "No");
+
+                if (!confirm) return;
+
+                var ok = await service.EliminarAviso(aviso.IdAviso);
+
+                if (ok)
+                {
+                    Avisos.Remove(aviso);
+                    Cargar();
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplayAlert("Error", "No se pudo eliminar", "OK");
+                }
             }
-            else
+            catch (ApiConnectionException)
             {
-                await App.Current.MainPage.DisplayAlert("Error", "No se pudo eliminar", "OK");
+                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se puede conectar con el servidor. No se pudo eliminar el aviso.", "OK");
+            }
+            catch (Exception)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado al eliminar.", "OK");
             }
         }
 
         public async void Cargar()
         {
-            IsLoading = true;
+            try
+            {
+                IsLoading = true;
 
-            int idMaestro = Preferences.Get("IdMaestro", 0);
+                int idMaestro = Preferences.Get("IdMaestro", 0);
 
-            var lista = await service.GetAvisosMaestro(idMaestro);
+                var lista = await service.GetAvisosMaestro(idMaestro);
 
-            Avisos.Clear();
-            foreach (var item in lista)
-                Avisos.Add(item);
-
-            IsLoading = false;
+                Avisos.Clear();
+                if(lista!= null)
+                {
+                    foreach (var item in lista)
+                    {
+                        Avisos.Add(item);
+                    }
+                }
+            }
+            catch (ApiConnectionException)
+            {
+                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se pudieron cargar los avisos. Verifica tu conexión.", "OK");
+            }
+            catch (Exception)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado al cargar los avisos.", "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
-
     }
 }

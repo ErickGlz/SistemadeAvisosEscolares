@@ -1,4 +1,4 @@
-﻿using AplicacionAvisosEscolares.Services.AvisosApp.Services;
+﻿using AplicacionAvisosEscolares.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,12 +10,42 @@ namespace AplicacionAvisosEscolares.ViewModels
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string Matricula { get; set; }
-        public string Password { get; set; }
+        private string matricula;
+        public string Matricula
+        {
+            get => matricula;
+            set
+            {
+                matricula = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Matricula)));
+            }
+        }
+
+        private string password;
+        public string Password
+        {
+            get => password;
+            set
+            {
+                password = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Password)));
+            }
+        }
+
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                isBusy = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsBusy)));
+            }
+        }
 
         public Command LoginCommand { get; }
 
-        AvisosService service;
+        private readonly AvisosService service;
 
         public LoginViewModel()
         {
@@ -25,33 +55,62 @@ namespace AplicacionAvisosEscolares.ViewModels
 
         private async Task Login()
         {
-            var alumno = await service.LoginAlumno(Matricula, Password);
-
-            if (alumno != null)
-            {
-                Preferences.Set("TipoUsuario", "Alumno");
-                Preferences.Set("IdAlumno", alumno.IdAlumno);
-
-                await Shell.Current.GoToAsync("AvisosPage");
+            if (IsBusy)
                 return;
-            }
 
-            if (int.TryParse(Matricula, out int idMaestro))
+            try
             {
-                var maestro = await service.LoginMaestro(idMaestro, Password);
+                IsBusy = true;
 
-                if (maestro != null)
+                var alumno = await service.LoginAlumno(Matricula, Password);
+
+                if (alumno != null)
                 {
-                    Preferences.Set("TipoUsuario", "Maestro");
-                    Preferences.Set("IdMaestro", maestro.IdMaestro);
-                    Preferences.Set("Grupo", maestro.Grupo);
+                    Preferences.Set("TipoUsuario", "Alumno");
+                    Preferences.Set("IdAlumno", alumno.IdAlumno);
 
-                    await Shell.Current.GoToAsync("AvisoMaestroPage");
+                    await Shell.Current.GoToAsync("AvisosPage");
                     return;
                 }
-            }
 
-            await App.Current.MainPage.DisplayAlert("Error", "Datos incorrectos", "OK");
+                if (int.TryParse(Matricula, out int idMaestro))
+                {
+                    var maestro = await service.LoginMaestro(idMaestro, Password);
+
+                    if (maestro != null)
+                    {
+                        Preferences.Set("TipoUsuario", "Maestro");
+                        Preferences.Set("IdMaestro", maestro.IdMaestro);
+                        Preferences.Set("Grupo", maestro.Grupo);
+
+                        await Shell.Current.GoToAsync("AvisoMaestroPage");
+                        return;
+                    }
+                }
+
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "Datos incorrectos",
+                    "OK");
+            }
+            catch (ApiConnectionException ex)
+            {
+                await App.Current.MainPage.DisplayAlert(
+                    "Sin conexión",
+                    ex.Message,
+                    "OK");
+            }
+            catch (Exception ex)
+            {
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    ex.Message,
+                    "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }

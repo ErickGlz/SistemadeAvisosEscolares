@@ -1,5 +1,5 @@
 ﻿using AplicacionAvisosEscolares.Models;
-using AplicacionAvisosEscolares.Services.AvisosApp.Services;
+using AplicacionAvisosEscolares.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,45 +28,56 @@ namespace AplicacionAvisosEscolares.ViewModels
 
         private async Task CrearAviso()
         {
-            int idMaestro = Preferences.Get("IdMaestro", 0);
-
-            int? idAlumno = null;
-
-            if (!string.IsNullOrEmpty(MatriculaAlumno))
+            try
             {
-                var alumno = await service.GetAlumnoPorMatricula(MatriculaAlumno);
+                int idMaestro = Preferences.Get("IdMaestro", 0);
 
-                if (alumno != null)
+                int? idAlumno = null;
+
+                if (!string.IsNullOrEmpty(MatriculaAlumno))
                 {
-                    idAlumno = alumno.IdAlumno;
+                    var alumno = await service.GetAlumnoPorMatricula(MatriculaAlumno);
+
+                    if (alumno != null)
+                    {
+                        idAlumno = alumno.IdAlumno;
+                    }
+                    else
+                    {
+                        await App.Current.MainPage.DisplayAlert("Error", "Matrícula no encontrada", "OK");
+                        return;
+                    }
+                }
+
+                var aviso = new CrearAvisoDTO
+                {
+                    Titulo = Titulo,
+                    Contenido = Contenido,
+                    IdMaestro = idMaestro,
+                    IdAlumno = idAlumno,
+                    TipoAviso = idAlumno == null ? "GENERAL" : "PERSONAL",
+                    FechaCaducidad = DateTime.Now.AddDays(7)
+                };
+
+                var ok = await service.CrearAviso(aviso);
+
+                if (ok)
+                {
+                    await App.Current.MainPage.DisplayAlert("OK", "Aviso creado", "OK");
+                    await Shell.Current.GoToAsync("..");
                 }
                 else
                 {
-                    await App.Current.MainPage.DisplayAlert("Error", "Matrícula no encontrada", "OK");
-                    return;
+                    await App.Current.MainPage.DisplayAlert("Error", "No se pudo crear", "OK");
                 }
             }
-
-            var aviso = new CrearAvisoDTO
+            catch (ApiConnectionException)
             {
-                Titulo = Titulo,
-                Contenido = Contenido,
-                IdMaestro = idMaestro,
-                IdAlumno = idAlumno,
-                TipoAviso = idAlumno == null ? "GENERAL" : "PERSONAL",
-                FechaCaducidad = DateTime.Now.AddDays(7)
-            };
-
-            var ok = await service.CrearAviso(aviso);
-
-            if (ok)
-            {
-                await App.Current.MainPage.DisplayAlert("OK", "Aviso creado", "OK");
-                await Shell.Current.GoToAsync("..");
+                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se puede conectar con el servidor. Verifica tu conexión a internet.", "OK");
             }
-            else
+            catch (Exception)
             {
-                await App.Current.MainPage.DisplayAlert("Error", "No se pudo crear", "OK");
+                await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado. Intenta de nuevo.", "OK");
             }
         }
 
