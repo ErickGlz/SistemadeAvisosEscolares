@@ -60,6 +60,18 @@ namespace AplicacionAvisosEscolares.ViewModels
 
             try
             {
+                var profiles = Connectivity.Current.ConnectionProfiles;
+
+                if (!profiles.Contains(ConnectionProfile.WiFi) &&
+                    !profiles.Contains(ConnectionProfile.Cellular))
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Sin conexión",
+                        "No tienes conexión a Internet",
+                        "Aceptar");
+
+                    return;
+                }
                 IsBusy = true;
 
                 var alumno = await service.LoginAlumno(Matricula, Password);
@@ -93,13 +105,7 @@ namespace AplicacionAvisosEscolares.ViewModels
                     "Datos incorrectos",
                     "OK");
             }
-            catch (ApiConnectionException ex)
-            {
-                await App.Current.MainPage.DisplayAlert(
-                    "Sin conexión",
-                    ex.Message,
-                    "OK");
-            }
+          
             catch (Exception ex)
             {
                 await App.Current.MainPage.DisplayAlert(

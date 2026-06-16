@@ -42,6 +42,18 @@ namespace AplicacionAvisosEscolares.ViewModels
         {
             try
             {
+                var profiles = Connectivity.Current.ConnectionProfiles;
+
+                if (!profiles.Contains(ConnectionProfile.WiFi) &&
+                    !profiles.Contains(ConnectionProfile.Cellular))
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Sin conexión",
+                        "No tienes conexión a Internet",
+                        "Aceptar");
+
+                    return;
+                }
                 IsLoading = true;
 
                 var lista = await service.GetAvisosAlumno(idAlumno);
@@ -56,10 +68,7 @@ namespace AplicacionAvisosEscolares.ViewModels
                     }
                 }
             }
-            catch (ApiConnectionException)
-            {
-                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se pudieron cargar los avisos. Verifica tu conexión a internet.", "OK");
-            }
+          
             catch (Exception)
             {
                 await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado al cargar los avisos.", "OK");

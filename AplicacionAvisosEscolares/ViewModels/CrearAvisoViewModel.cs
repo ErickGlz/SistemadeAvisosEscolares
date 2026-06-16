@@ -30,6 +30,18 @@ namespace AplicacionAvisosEscolares.ViewModels
         {
             try
             {
+                var profiles = Connectivity.Current.ConnectionProfiles;
+
+                if (!profiles.Contains(ConnectionProfile.WiFi) &&
+                    !profiles.Contains(ConnectionProfile.Cellular))
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Sin conexión",
+                        "No tienes conexión a Internet",
+                        "Aceptar");
+
+                    return;
+                }
                 int idMaestro = Preferences.Get("IdMaestro", 0);
 
                 int? idAlumno = null;
@@ -71,10 +83,7 @@ namespace AplicacionAvisosEscolares.ViewModels
                     await App.Current.MainPage.DisplayAlert("Error", "No se pudo crear", "OK");
                 }
             }
-            catch (ApiConnectionException)
-            {
-                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se puede conectar con el servidor. Verifica tu conexión a internet.", "OK");
-            }
+           
             catch (Exception)
             {
                 await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado. Intenta de nuevo.", "OK");

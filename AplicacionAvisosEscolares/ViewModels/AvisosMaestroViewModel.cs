@@ -46,6 +46,18 @@ namespace AplicacionAvisosEscolares.ViewModels
         {
             try
             {
+                var profiles = Connectivity.Current.ConnectionProfiles;
+
+                if (!profiles.Contains(ConnectionProfile.WiFi) &&
+                    !profiles.Contains(ConnectionProfile.Cellular))
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Sin conexión",
+                        "No tienes conexión a Internet",
+                        "Aceptar");
+
+                    return;
+                }
                 bool confirm = await App.Current.MainPage.DisplayAlert("Confirmar", "¿Eliminar este aviso?", "Sí", "No");
 
                 if (!confirm) return;
@@ -62,10 +74,7 @@ namespace AplicacionAvisosEscolares.ViewModels
                     await App.Current.MainPage.DisplayAlert("Error", "No se pudo eliminar", "OK");
                 }
             }
-            catch (ApiConnectionException)
-            {
-                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se puede conectar con el servidor. No se pudo eliminar el aviso.", "OK");
-            }
+         
             catch (Exception)
             {
                 await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado al eliminar.", "OK");
@@ -76,6 +85,18 @@ namespace AplicacionAvisosEscolares.ViewModels
         {
             try
             {
+                var profiles = Connectivity.Current.ConnectionProfiles;
+
+                if (!profiles.Contains(ConnectionProfile.WiFi) &&
+                    !profiles.Contains(ConnectionProfile.Cellular))
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Sin conexión",
+                        "No tienes conexión a Internet",
+                        "Aceptar");
+
+                    return;
+                }
                 IsLoading = true;
 
                 int idMaestro = Preferences.Get("IdMaestro", 0);
@@ -91,10 +112,7 @@ namespace AplicacionAvisosEscolares.ViewModels
                     }
                 }
             }
-            catch (ApiConnectionException)
-            {
-                await App.Current.MainPage.DisplayAlert("Sin conexión", "No se pudieron cargar los avisos. Verifica tu conexión.", "OK");
-            }
+           
             catch (Exception)
             {
                 await App.Current.MainPage.DisplayAlert("Error", "Ocurrió un error inesperado al cargar los avisos.", "OK");
