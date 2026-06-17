@@ -1,9 +1,5 @@
 ﻿using AplicacionAvisosEscolares.Models;
-using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 
 namespace AplicacionAvisosEscolares.Services
 {
@@ -27,46 +23,34 @@ namespace AplicacionAvisosEscolares.Services
             client = new HttpClient(handler)
             {
                 BaseAddress = new Uri(baseUrl),
-                Timeout = TimeSpan.FromSeconds(30)
             };
-        }
-
-        public bool TieneInternet()
-        {
-            return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
         }
 
         private async Task<T> HandleApiCallAsync<T>(
             Func<Task<T>> apiCall,
             T defaultValue = default)
         {
-            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
-            {
-                throw new ApiConnectionException(
-                    "No hay conexión a Internet.",
-                    new Exception("Sin conexión"));
-            }
-
             try
             {
+                if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                {
+                    throw new ApiConnectionException(
+                        "No hay conexión a Internet.",
+                        new Exception("Sin conexión"));
+                }
+
                 return await apiCall();
-            }
-            catch (TaskCanceledException ex)
-            {
-                throw new ApiConnectionException(
-                    "La solicitud ha expirado. El servidor no responde.",
-                    ex);
             }
             catch (HttpRequestException ex)
             {
                 throw new ApiConnectionException(
-                    "No se pudo conectar con el servidor.",
+                    "No hay conexión a Internet.",
                     ex);
             }
-            catch (Exception ex)
+            catch (TaskCanceledException ex)
             {
                 throw new ApiConnectionException(
-                    "Ocurrió un error inesperado al comunicarse con el servidor.",
+                    "No hay conexión a Internet.",
                     ex);
             }
         }
